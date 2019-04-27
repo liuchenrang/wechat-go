@@ -376,7 +376,6 @@ func (api *ApiV2)  WebWxSendMsg(common *Common, ce *XmlConfig, cookies []*http.C
 	return body, nil
 }
 
-// WebWxUploadMedia: webwxuploadmedia api
 func (api *ApiV2) WebWxUploadMedia(common *Common, ce *XmlConfig, cookies []*http.Cookie,
 	filename string, content []byte) (string, error) {
 
@@ -456,8 +455,10 @@ func (api *ApiV2) WebWxUploadMedia(common *Common, ce *XmlConfig, cookies []*htt
 	u, _ := url.Parse(common.UploadUrl)
 	jar.SetCookies(u, cookies)
 	api.httpClient.SetJar(jar)
+	headers := make(map[string]string)
 
-	body, _ := api.httpClient.fetchWithReader("POST", common.UploadUrl,&b, Header{})
+	headers["Content-Type"] = w.FormDataContentType()
+	body, _ := api.httpClient.fetchWithReader("POST", common.UploadUrl,&b, headers)
 
 	jc, err := rrconfig.LoadJsonConfigFromBytes(body)
 	if err != nil {
@@ -471,7 +472,6 @@ func (api *ApiV2) WebWxUploadMedia(common *Common, ce *XmlConfig, cookies []*htt
 	return mediaId, nil
 }
 
-// WebWxSendMsgImg: webwxsendmsgimg api
 func (api *ApiV2)  WebWxSendMsgImg(common *Common, ce *XmlConfig, cookies []*http.Cookie,
 	from, to, media string) (int, error) {
 
