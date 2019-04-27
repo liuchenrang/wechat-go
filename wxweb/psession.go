@@ -4,9 +4,9 @@ import (
 	"github.com/songtianyi/wechat-go/wxweb"
 	"net/http"
 	"encoding/json"
-	"github.com/songtianyi/rrframework/logs"
 	"io/ioutil"
 	"os"
+	"webot/logger"
 )
 
 type PSession struct {
@@ -55,7 +55,7 @@ func WriteSessionData(multiSession map[string]*wxweb.Session, path string) {
 	}
 	data, err := json.Marshal(dataStruct)
 	if err != nil {
-		logs.Error(err)
+		logger.Logger.Error("err %s",err.Error())
 	} else {
 		ioutil.WriteFile(path, data, 0666)
 	}
@@ -69,7 +69,7 @@ func ReadSessionData(path string) map[string]*wxweb.Session {
 		if error == nil && len(data) > 0 {
 			error = json.Unmarshal(data, &dataStruct)
 			if error != nil {
-				logs.Error(error)
+				logger.Logger.Error("err %s",err.Error())
 			} else {
 				for uuid, session := range dataStruct {
 					var cookies = make([]*http.Cookie, 0, len(session.Cookies))

@@ -26,7 +26,9 @@ SOFTWARE.
 package wxweb
 
 import (
+	"github.com/songtianyi/wechat-go/wxweb"
 	"math/rand"
+	"net/http"
 	"reflect"
 	"time"
 
@@ -84,4 +86,34 @@ func RealTargetUserName(session *Session, msg *ReceivedMessage) string {
 		return msg.ToUserName
 	}
 	return msg.FromUserName
+}
+
+func SessionToPSesson(v *wxweb.Session) (p *PSession) {
+	pSession := &PSession{
+		QrcodePath: v.QrcodePath, //qrcode path
+		QrcodeUUID: v.QrcodeUUID, //uuid
+		CreateTime: v.CreateTime,
+	}
+	if v.WxWebCommon != nil {
+		pSession.WxWebCommon = *v.WxWebCommon
+	}
+	if v.WxWebXcg != nil {
+		pSession.WxWebXcg = *v.WxWebXcg
+	}
+
+	if v.Cookies != nil {
+		pSession.Cookies = make([]http.Cookie, 0)
+
+		for _, vv := range v.Cookies {
+			if vv.Name != "" {
+				pSession.Cookies = append(pSession.Cookies, *vv)
+			}
+		}
+	}
+	//
+	if v.Bot != nil {
+		pSession.WxName = v.Bot.NickName
+		pSession.Bot = *v.Bot
+	}
+	return pSession
 }

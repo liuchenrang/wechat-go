@@ -27,8 +27,7 @@ func NewClient() *Client {
 		// TLSHandshakeTimeout: 100 * time.Second,
 	}
 	cookieJar, _ := cookiejar.New(nil)
-	//proxy, _ := url.Parse("http://127.0.0.1:8888")
-	//netTransport = &http.Transport{Proxy:http.ProxyURL(proxy)}
+
 	httpClient := &http.Client{
 		Timeout:   time.Second * 100,
 		Transport: netTransport,
@@ -77,7 +76,6 @@ func (c *Client) PostJsonByteForResp(url string, json []byte) (*http.Response, [
 	return c.fetchResp("POST", url, json, Header{"Content-Type": "application/json; charset=UTF-8"})
 }
 func (c *Client) fetchReponse(method string, uri string, body []byte, headers map[string]string) (*http.Response, error) {
-
 	req, err := http.NewRequest(method, uri, bytes.NewBuffer(body))
 	if err != nil {
 		return nil, err
