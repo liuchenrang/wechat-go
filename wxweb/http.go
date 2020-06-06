@@ -27,7 +27,8 @@ func NewClient() *Client {
 		// TLSHandshakeTimeout: 100 * time.Second,
 	}
 	cookieJar, _ := cookiejar.New(nil)
-
+	//proxy, _ := url.Parse("http://127.0.0.1:8888")
+	//netTransport = &http.Transport{Proxy:http.ProxyURL(proxy)}
 	httpClient := &http.Client{
 		Timeout:   time.Second * 100,
 		Transport: netTransport,

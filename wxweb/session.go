@@ -449,6 +449,7 @@ func (s *Session) SendText(msg, from, to string) (string, string, error) {
 	if err != nil {
 		return "", "", err
 	}
+	logs.Info("SendInfo uid %s",s.Bot.Uin,string(b))
 	jc, _ := rrconfig.LoadJsonConfigFromBytes(b)
 	ret, _ := jc.GetInt("BaseResponse.Ret")
 	if ret != 0 {

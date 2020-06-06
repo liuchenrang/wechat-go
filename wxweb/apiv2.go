@@ -29,6 +29,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"encoding/xml"
+	"errors"
 	"fmt"
 	"github.com/parnurzeal/gorequest"
 	"github.com/songtianyi/rrframework/logs"
@@ -227,6 +228,11 @@ func (api *ApiV2) WebWxSync(common *Common, ce *XmlConfig, cookies []*http.Cooki
 	httpResp, body, _ := request.Post(uri).Send(string(b)).
 		Retry(3, 5*time.Second, http.StatusBadRequest, http.StatusInternalServerError).
 		End()
+
+	if httpResp == nil {
+		return nil,errors.New("http error")
+	}
+	defer httpResp.Body.Close()
 	resp := http.Response(*httpResp)
 
 	//api.httpClient.SetJar(jar)
